@@ -1,8 +1,8 @@
 module View exposing (view)
 
 import Html exposing (..)
-import Html.Attributes as Attr exposing (..)
-import Html.Events as Ev exposing (..)
+import Html.Attributes exposing (..)
+import Html.Events exposing (..)
 import Color
 import Material.Icons.Navigation as Icon
 import View.Extra exposing (..)

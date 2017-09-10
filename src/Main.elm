@@ -1,9 +1,8 @@
 module Main exposing (..)
 
-import Html exposing (..)
-import Response exposing (..)
+import Html exposing (program)
+import Response exposing (Response)
 import Ports
-import File exposing (File)
 import Model exposing (Model)
 import Msg exposing (..)
 import Update exposing (update)
@@ -21,6 +20,7 @@ subscriptions model =
     [ Ports.dropAudios DropAudios ]
 
 
+main : Program Never Model Msg
 main =
   Html.program
     { init = init

@@ -1,6 +1,5 @@
 module Model exposing (..)
 
-import File exposing (File)
 import Audio exposing (Audio)
 
 

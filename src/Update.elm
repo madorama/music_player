@@ -3,7 +3,7 @@ module Update exposing (update)
 import Response exposing (..)
 import MusicMetadata exposing (RawMetadata)
 import Audio
-import Model exposing (..)
+import Model exposing (Model)
 import Msg exposing (..)
 import Ports
 

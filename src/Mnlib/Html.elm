@@ -2,7 +2,6 @@ module Mnlib.Html exposing (..)
 
 import Html exposing (..)
 import Html.Attributes as Attr exposing (..)
-import Html.Events as Ev exposing (..)
 
 
 prop : String -> String -> Attribute msg
