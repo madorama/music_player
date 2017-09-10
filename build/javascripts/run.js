@@ -10,6 +10,10 @@
     // ウィンドウ最小化
     app.ports.minimize.subscribe(remote.BrowserWindow.getFocusedWindow().minimize)
 
+    document.ondrop = document.ondragover = (e) => {
+      e.preventDefault()
+      return false
+    }
     document.body.addEventListener("drop", (e) => {
       const mm = require("music-metadata")
       const files = Array.from(e.dataTransfer.files).filter((file) => file.type.match(/^audio/))
