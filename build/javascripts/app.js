@@ -9377,143 +9377,6 @@ var _elm_lang$core$Task$cmdMap = F2(
 	});
 _elm_lang$core$Native_Platform.effectManagers['Task'] = {pkg: 'elm-lang/core', init: _elm_lang$core$Task$init, onEffects: _elm_lang$core$Task$onEffects, onSelfMsg: _elm_lang$core$Task$onSelfMsg, tag: 'cmd', cmdMap: _elm_lang$core$Task$cmdMap};
 
-//import Maybe, Native.List //
-
-var _elm_lang$core$Native_Regex = function() {
-
-function escape(str)
-{
-	return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-}
-function caseInsensitive(re)
-{
-	return new RegExp(re.source, 'gi');
-}
-function regex(raw)
-{
-	return new RegExp(raw, 'g');
-}
-
-function contains(re, string)
-{
-	return string.match(re) !== null;
-}
-
-function find(n, re, str)
-{
-	n = n.ctor === 'All' ? Infinity : n._0;
-	var out = [];
-	var number = 0;
-	var string = str;
-	var lastIndex = re.lastIndex;
-	var prevLastIndex = -1;
-	var result;
-	while (number++ < n && (result = re.exec(string)))
-	{
-		if (prevLastIndex === re.lastIndex) break;
-		var i = result.length - 1;
-		var subs = new Array(i);
-		while (i > 0)
-		{
-			var submatch = result[i];
-			subs[--i] = submatch === undefined
-				? _elm_lang$core$Maybe$Nothing
-				: _elm_lang$core$Maybe$Just(submatch);
-		}
-		out.push({
-			match: result[0],
-			submatches: _elm_lang$core$Native_List.fromArray(subs),
-			index: result.index,
-			number: number
-		});
-		prevLastIndex = re.lastIndex;
-	}
-	re.lastIndex = lastIndex;
-	return _elm_lang$core$Native_List.fromArray(out);
-}
-
-function replace(n, re, replacer, string)
-{
-	n = n.ctor === 'All' ? Infinity : n._0;
-	var count = 0;
-	function jsReplacer(match)
-	{
-		if (count++ >= n)
-		{
-			return match;
-		}
-		var i = arguments.length - 3;
-		var submatches = new Array(i);
-		while (i > 0)
-		{
-			var submatch = arguments[i];
-			submatches[--i] = submatch === undefined
-				? _elm_lang$core$Maybe$Nothing
-				: _elm_lang$core$Maybe$Just(submatch);
-		}
-		return replacer({
-			match: match,
-			submatches: _elm_lang$core$Native_List.fromArray(submatches),
-			index: arguments[arguments.length - 2],
-			number: count
-		});
-	}
-	return string.replace(re, jsReplacer);
-}
-
-function split(n, re, str)
-{
-	n = n.ctor === 'All' ? Infinity : n._0;
-	if (n === Infinity)
-	{
-		return _elm_lang$core$Native_List.fromArray(str.split(re));
-	}
-	var string = str;
-	var result;
-	var out = [];
-	var start = re.lastIndex;
-	var restoreLastIndex = re.lastIndex;
-	while (n--)
-	{
-		if (!(result = re.exec(string))) break;
-		out.push(string.slice(start, result.index));
-		start = re.lastIndex;
-	}
-	out.push(string.slice(start));
-	re.lastIndex = restoreLastIndex;
-	return _elm_lang$core$Native_List.fromArray(out);
-}
-
-return {
-	regex: regex,
-	caseInsensitive: caseInsensitive,
-	escape: escape,
-
-	contains: F2(contains),
-	find: F3(find),
-	replace: F4(replace),
-	split: F3(split)
-};
-
-}();
-
-var _elm_lang$core$Regex$split = _elm_lang$core$Native_Regex.split;
-var _elm_lang$core$Regex$replace = _elm_lang$core$Native_Regex.replace;
-var _elm_lang$core$Regex$find = _elm_lang$core$Native_Regex.find;
-var _elm_lang$core$Regex$contains = _elm_lang$core$Native_Regex.contains;
-var _elm_lang$core$Regex$caseInsensitive = _elm_lang$core$Native_Regex.caseInsensitive;
-var _elm_lang$core$Regex$regex = _elm_lang$core$Native_Regex.regex;
-var _elm_lang$core$Regex$escape = _elm_lang$core$Native_Regex.escape;
-var _elm_lang$core$Regex$Match = F4(
-	function (a, b, c, d) {
-		return {match: a, submatches: b, index: c, number: d};
-	});
-var _elm_lang$core$Regex$Regex = {ctor: 'Regex'};
-var _elm_lang$core$Regex$AtMost = function (a) {
-	return {ctor: 'AtMost', _0: a};
-};
-var _elm_lang$core$Regex$All = {ctor: 'All'};
-
 var _elm_lang$html$Html_Events$keyCode = A2(_elm_lang$core$Json_Decode$field, 'keyCode', _elm_lang$core$Json_Decode$int);
 var _elm_lang$html$Html_Events$targetChecked = A2(
 	_elm_lang$core$Json_Decode$at,
@@ -9801,82 +9664,6 @@ var _user$project$File$File = F4(
 		return {name: a, path: b, size: c, type_: d};
 	});
 
-var _user$project$Mnlib_Html$empty = _elm_lang$html$Html$text('');
-var _user$project$Mnlib_Html$prop = F2(
-	function (name, value) {
-		return _elm_lang$html$Html_Attributes$style(
-			{
-				ctor: '::',
-				_0: {ctor: '_Tuple2', _0: name, _1: value},
-				_1: {ctor: '[]'}
-			});
-	});
-var _user$project$Mnlib_Html$flexbox = F3(
-	function (dir, attrs, childs) {
-		return A2(
-			_elm_lang$html$Html$div,
-			{
-				ctor: '::',
-				_0: A2(_user$project$Mnlib_Html$prop, 'display', 'flex'),
-				_1: {
-					ctor: '::',
-					_0: A2(_user$project$Mnlib_Html$prop, 'flex-direction', dir),
-					_1: {
-						ctor: '::',
-						_0: A2(_user$project$Mnlib_Html$prop, 'box-sizing', 'border-box'),
-						_1: attrs
-					}
-				}
-			},
-			childs);
-	});
-var _user$project$Mnlib_Html$column = _user$project$Mnlib_Html$flexbox('column');
-var _user$project$Mnlib_Html$columnReverse = _user$project$Mnlib_Html$flexbox('column-reverse');
-var _user$project$Mnlib_Html$row = _user$project$Mnlib_Html$flexbox('row');
-var _user$project$Mnlib_Html$rowReverse = _user$project$Mnlib_Html$flexbox('row-reverse');
-var _user$project$Mnlib_Html$fillBox = function (attrs) {
-	return _user$project$Mnlib_Html$column(
-		A2(
-			_elm_lang$core$Basics_ops['++'],
-			{
-				ctor: '::',
-				_0: A2(_user$project$Mnlib_Html$prop, 'width', '100%'),
-				_1: {
-					ctor: '::',
-					_0: A2(_user$project$Mnlib_Html$prop, 'height', '100%'),
-					_1: {
-						ctor: '::',
-						_0: A2(_user$project$Mnlib_Html$prop, 'display', 'flex'),
-						_1: {
-							ctor: '::',
-							_0: A2(_user$project$Mnlib_Html$prop, 'position', 'absolute'),
-							_1: {
-								ctor: '::',
-								_0: A2(_user$project$Mnlib_Html$prop, 'left', '0'),
-								_1: {
-									ctor: '::',
-									_0: A2(_user$project$Mnlib_Html$prop, 'top', '0'),
-									_1: {
-										ctor: '::',
-										_0: A2(_user$project$Mnlib_Html$prop, 'user-select', 'none'),
-										_1: {ctor: '[]'}
-									}
-								}
-							}
-						}
-					}
-				}
-			},
-			attrs));
-};
-
-var _user$project$Model$init = {
-	audios: {ctor: '[]'}
-};
-var _user$project$Model$Model = function (a) {
-	return {audios: a};
-};
-
 var _user$project$Ports$minimize = _elm_lang$core$Native_Platform.outgoingPort(
 	'minimize',
 	function (v) {
@@ -10102,7 +9889,127 @@ var _user$project$Ports$dropAudios = _elm_lang$core$Native_Platform.incomingPort
 			},
 			A2(_elm_lang$core$Json_Decode$field, 'tagType', _elm_lang$core$Json_Decode$string))));
 
-var _user$project$Main$viewAudio = function (audio) {
+var _user$project$Model$init = {
+	audios: {ctor: '[]'},
+	selectAudio: _elm_lang$core$Maybe$Nothing
+};
+var _user$project$Model$Model = F2(
+	function (a, b) {
+		return {audios: a, selectAudio: b};
+	});
+
+var _user$project$Msg$DropAudios = function (a) {
+	return {ctor: 'DropAudios', _0: a};
+};
+var _user$project$Msg$Minimize = {ctor: 'Minimize'};
+
+var _user$project$Update$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		if (_p0.ctor === 'Minimize') {
+			return A2(
+				_etaque$elm_response$Response$withCmd,
+				_user$project$Ports$minimize(
+					{ctor: '_Tuple0'}),
+				model);
+		} else {
+			var audios = A2(
+				_elm_lang$core$List$map,
+				_user$project$Audio$fromMusicMetadata,
+				A2(_elm_lang$core$List$map, _user$project$MusicMetadata$getMetadata, _p0._0));
+			return _etaque$elm_response$Response$withNone(
+				_elm_lang$core$Native_Utils.update(
+					model,
+					{
+						audios: A2(_elm_lang$core$List$append, model.audios, audios)
+					}));
+		}
+	});
+
+var _user$project$Mnlib_Html$empty = _elm_lang$html$Html$text('');
+var _user$project$Mnlib_Html$prop = F2(
+	function (name, value) {
+		return _elm_lang$html$Html_Attributes$style(
+			{
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: name, _1: value},
+				_1: {ctor: '[]'}
+			});
+	});
+var _user$project$Mnlib_Html$flexbox = F3(
+	function (dir, attrs, childs) {
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: A2(_user$project$Mnlib_Html$prop, 'display', 'flex'),
+				_1: {
+					ctor: '::',
+					_0: A2(_user$project$Mnlib_Html$prop, 'flex-direction', dir),
+					_1: {
+						ctor: '::',
+						_0: A2(_user$project$Mnlib_Html$prop, 'box-sizing', 'border-box'),
+						_1: attrs
+					}
+				}
+			},
+			childs);
+	});
+var _user$project$Mnlib_Html$column = _user$project$Mnlib_Html$flexbox('column');
+var _user$project$Mnlib_Html$columnReverse = _user$project$Mnlib_Html$flexbox('column-reverse');
+var _user$project$Mnlib_Html$row = _user$project$Mnlib_Html$flexbox('row');
+var _user$project$Mnlib_Html$rowReverse = _user$project$Mnlib_Html$flexbox('row-reverse');
+var _user$project$Mnlib_Html$fillBox = function (attrs) {
+	return _user$project$Mnlib_Html$column(
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			{
+				ctor: '::',
+				_0: A2(_user$project$Mnlib_Html$prop, 'width', '100%'),
+				_1: {
+					ctor: '::',
+					_0: A2(_user$project$Mnlib_Html$prop, 'height', '100%'),
+					_1: {
+						ctor: '::',
+						_0: A2(_user$project$Mnlib_Html$prop, 'display', 'flex'),
+						_1: {
+							ctor: '::',
+							_0: A2(_user$project$Mnlib_Html$prop, 'position', 'absolute'),
+							_1: {
+								ctor: '::',
+								_0: A2(_user$project$Mnlib_Html$prop, 'left', '0'),
+								_1: {
+									ctor: '::',
+									_0: A2(_user$project$Mnlib_Html$prop, 'top', '0'),
+									_1: {
+										ctor: '::',
+										_0: A2(_user$project$Mnlib_Html$prop, 'user-select', 'none'),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			attrs));
+};
+
+var _user$project$View_Player$viewPlayButton = function (model) {
+	return _user$project$Mnlib_Html$empty;
+};
+var _user$project$View_Player$view = function (model) {
+	return A2(
+		_user$project$Mnlib_Html$row,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: _user$project$View_Player$viewPlayButton(model),
+			_1: {ctor: '[]'}
+		});
+};
+
+var _user$project$View$viewAudio = function (audio) {
 	return A2(
 		_elm_lang$html$Html$div,
 		{
@@ -10146,7 +10053,7 @@ var _user$project$Main$viewAudio = function (audio) {
 			}
 		});
 };
-var _user$project$Main$viewAudioList = function (audios) {
+var _user$project$View$viewAudioList = function (audios) {
 	return A2(
 		_user$project$Mnlib_Html$column,
 		{
@@ -10154,9 +10061,9 @@ var _user$project$Main$viewAudioList = function (audios) {
 			_0: _elm_lang$html$Html_Attributes$class('audio-list'),
 			_1: {ctor: '[]'}
 		},
-		A2(_elm_lang$core$List$map, _user$project$Main$viewAudio, audios));
+		A2(_elm_lang$core$List$map, _user$project$View$viewAudio, audios));
 };
-var _user$project$Main$viewMain = function (model) {
+var _user$project$View$viewMain = function (model) {
 	return A2(
 		_user$project$Mnlib_Html$column,
 		{
@@ -10166,49 +10073,15 @@ var _user$project$Main$viewMain = function (model) {
 		},
 		{
 			ctor: '::',
-			_0: _user$project$Main$viewAudioList(model.audios),
-			_1: {ctor: '[]'}
+			_0: _user$project$View_Player$view(model),
+			_1: {
+				ctor: '::',
+				_0: _user$project$View$viewAudioList(model.audios),
+				_1: {ctor: '[]'}
+			}
 		});
 };
-var _user$project$Main$update = F2(
-	function (msg, model) {
-		var _p1 = msg;
-		if (_p1.ctor === 'Minimize') {
-			return A2(
-				_etaque$elm_response$Response$withCmd,
-				_user$project$Ports$minimize(
-					{ctor: '_Tuple0'}),
-				model);
-		} else {
-			var audios = A2(
-				_elm_lang$core$List$map,
-				_user$project$Audio$fromMusicMetadata,
-				A2(_elm_lang$core$List$map, _user$project$MusicMetadata$getMetadata, _p1._0));
-			return _etaque$elm_response$Response$withNone(
-				_elm_lang$core$Native_Utils.update(
-					model,
-					{
-						audios: A2(_elm_lang$core$List$append, model.audios, audios)
-					}));
-		}
-	});
-var _user$project$Main$init = A2(
-	_elm_lang$core$Platform_Cmd_ops['!'],
-	_user$project$Model$init,
-	{ctor: '[]'});
-var _user$project$Main$DropAudios = function (a) {
-	return {ctor: 'DropAudios', _0: a};
-};
-var _user$project$Main$subscriptions = function (model) {
-	return _elm_lang$core$Platform_Sub$batch(
-		{
-			ctor: '::',
-			_0: _user$project$Ports$dropAudios(_user$project$Main$DropAudios),
-			_1: {ctor: '[]'}
-		});
-};
-var _user$project$Main$Minimize = {ctor: 'Minimize'};
-var _user$project$Main$viewTitleBar = function (model) {
+var _user$project$View$viewTitleBar = function (model) {
 	return A2(
 		_user$project$Mnlib_Html$row,
 		{
@@ -10239,7 +10112,7 @@ var _user$project$Main$viewTitleBar = function (model) {
 						_0: _elm_lang$html$Html_Attributes$class('button'),
 						_1: {
 							ctor: '::',
-							_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$Minimize),
+							_0: _elm_lang$html$Html_Events$onClick(_user$project$Msg$Minimize),
 							_1: {ctor: '[]'}
 						}
 					},
@@ -10271,7 +10144,7 @@ var _user$project$Main$viewTitleBar = function (model) {
 			}
 		});
 };
-var _user$project$Main$view = function (model) {
+var _user$project$View$view = function (model) {
 	return A2(
 		_user$project$Mnlib_Html$fillBox,
 		{
@@ -10281,16 +10154,29 @@ var _user$project$Main$view = function (model) {
 		},
 		{
 			ctor: '::',
-			_0: _user$project$Main$viewTitleBar(model),
+			_0: _user$project$View$viewTitleBar(model),
 			_1: {
 				ctor: '::',
-				_0: _user$project$Main$viewMain(model),
+				_0: _user$project$View$viewMain(model),
 				_1: {ctor: '[]'}
 			}
 		});
 };
+
+var _user$project$Main$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$batch(
+		{
+			ctor: '::',
+			_0: _user$project$Ports$dropAudios(_user$project$Msg$DropAudios),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$Main$init = A2(
+	_elm_lang$core$Platform_Cmd_ops['!'],
+	_user$project$Model$init,
+	{ctor: '[]'});
 var _user$project$Main$main = _elm_lang$html$Html$program(
-	{init: _user$project$Main$init, view: _user$project$Main$view, update: _user$project$Main$update, subscriptions: _user$project$Main$subscriptions})();
+	{init: _user$project$Main$init, view: _user$project$View$view, update: _user$project$Update$update, subscriptions: _user$project$Main$subscriptions})();
 
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
