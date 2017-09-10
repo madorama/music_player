@@ -1,0 +1,5 @@
+{
+    "name": "app",
+    "js_output_path": "build/javascripts/",
+    "css_output_path": "build/css/"
+}
