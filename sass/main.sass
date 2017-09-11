@@ -1,46 +1,69 @@
+@import common
+@import audio_player
+
 *
   margin: 0
   padding: 0
   font-family: Verdana, "游ゴシック", YuGothic, "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, sans-serif
 
-.titlebar
-  background: #323440
-  -webkit-app-region: drag
-  align-items: center
-  height: 32px
-  color: #f0f0f0
 
-  .title
+.button
+  cursor: default
+  align-items: center
+  justify-content: center
+  transition: 0.1s
+  height: 100%
+  &:hover
+    background-color: lighten($black-color, 20%)
+
+
+.titlebar
+  -webkit-app-region: drag
+  background: $black-color
+  align-items: center
+  color: #f0f0f0
+  height: 32px
+
+  .title-wrap
     flex: 1
-    padding: 6px
+    overflow: hidden
+
+    .title
+      padding-left: 8px
+      overflow: hidden
+      text-overflow: ellipsis
+      white-space: nowrap
 
   .button
-    cursor: default
     -webkit-app-region: no-drag
-    align-items: center
-    justify-content: center
     width: 48px
-    height: 32px
-    transition: 0.1s
-
-    &:hover
-      background-color: rgba(#889, 0.4)
 
   .close
     &:hover
       background-color: rgba(#f00, 0.8)
 
+
 #view-main
   background-color: #f0f0f0
   flex: 1
-  overflow-y: auto
 
-.audio-list
-  height: 100%
 
-  .audio
-    background-color: #fafaff
-    padding: 4px
+.audio-list-wrap
+  flex: 1
+  overflow: auto
 
-  .audio:nth-child(even)
-    background-color: #f0f0fa
+  .audio-list
+    min-width: max-content
+
+    .audio
+      cursor: default
+      background-color: #fafaff
+      padding: 4px
+      height: 32px
+      align-items: center
+
+      &:nth-child(even)
+        background-color: #f0f0fa
+
+      &.select
+        background-color: rgba(#a8eaff, 0.6)

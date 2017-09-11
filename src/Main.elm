@@ -17,7 +17,9 @@ init =
 subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.batch
-    [ Ports.dropAudios DropAudios ]
+    [ Ports.dropAudios DropAudios
+    , Ports.audioUpdate UpdateTime
+    ]
 
 
 main : Program Never Model Msg

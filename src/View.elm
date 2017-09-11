@@ -7,7 +7,7 @@ import Color
 import Material.Icons.Navigation as Icon
 import View.Extra exposing (..)
 import Mnlib.Html exposing (..)
-import Audio exposing (Audio)
+import Audio exposing (Audio, DisplayElement (..))
 import Model exposing (Model)
 import Msg exposing (..)
 import View.Player as Player exposing (..)
@@ -24,13 +24,25 @@ view model =
 
 viewTitleBar : Model -> Html Msg
 viewTitleBar model =
+  let
+    titleText =
+      case Model.getPlayingAudio model of
+        Nothing ->
+          "MusicPlayer"
+
+        Just audio ->
+          Audio.makeAudioString [Title, Artist] audio
+  in
   row
     [ class "titlebar"
     ]
     [ row
-        [ class "title"
+        [ class "title-wrap"
         ]
-        [ text "Music player" ]
+        [ div
+            [ class "title" ]
+            [ text titleText ]
+        ]
     , row
         [ class "button"
         , onClick Minimize
@@ -50,22 +62,29 @@ viewMain model =
     [ id "view-main"
     ]
     [ Player.view model
-    , viewAudioList model.audios
+    , viewAudioList model
     ]
 
 
-viewAudioList : List Audio -> Html Msg
-viewAudioList audios =
+viewAudioList : Model -> Html Msg
+viewAudioList model =
   column
-    [ class "audio-list" ]
-    ( List.map viewAudio audios )
-
-
-viewAudio : Audio -> Html Msg
-viewAudio audio =
-  div
-    [ class "audio" ]
-    [ viewJust (\album -> text <| "[" ++ album ++ "] ") audio.album
-    , viewJust (text << (flip (++)) " / ") audio.artist
-    , text <| audio.name
+    [ class "audio-list-wrap" ]
+    [ column
+        [ class "audio-list"]
+        ( List.indexedMap (viewAudio model.selectAudioId) model.audios )
     ]
+
+
+viewAudio : Int -> Int -> Audio -> Html Msg
+viewAudio selectAudioId audioId audio =
+  row
+    [ class "audio"
+    , onClick (ClickAudio audioId)
+    , onDoubleClick (DoubleClickAudio audioId)
+    , if selectAudioId == audioId then
+        class "select"
+      else
+        class ""
+    ]
+    [ text <| Audio.makeAudioString [Title, Album, Artist] audio ]

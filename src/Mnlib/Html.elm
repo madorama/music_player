@@ -20,6 +20,7 @@ flexbox dir attrs childs =
     ( prop "display" "flex"
         :: prop "flex-direction" dir
         :: prop "box-sizing" "border-box"
+        :: prop "flex-shrink" "0"
         :: attrs
     )
     childs
