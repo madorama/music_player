@@ -1,6 +1,6 @@
 # Music Player
 
-Electron+Elmで開発中のシンプルな音楽プレイヤー(まだ音楽プレイヤーじゃない)
+Electron+Elmで開発中のシンプルな音楽プレイヤー
 
 ## Run
 
