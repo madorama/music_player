@@ -7,16 +7,19 @@
   height: 32px
 
   .volume
-    align-items: center
     height: 100%
+    align-items: center
     .volume-bar
       width: 60px
 
   .time
+    flex: 1
     height: 100%
     align-items: center
-    padding-left: 4px
+    padding: 0 4px
     color: #f0f0f0
+    .seek-bar
+      width: 100%
 
   input[type="range"]
     -webkit-appearance: none
