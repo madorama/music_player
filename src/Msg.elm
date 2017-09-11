@@ -14,3 +14,4 @@ type Msg
   | ClickMute
   | ChangeVolume String
   | Seek String
+  | AudioEnded ()

@@ -7,30 +7,34 @@
 
   let audio = new Audio()
 
+  audio.addEventListener("timeupdate", () => {
+    app.ports.audioUpdate.send(audio.currentTime)
+  })
+
+  audio.addEventListener("ended", () => {
+    app.ports.audioEnded.send(null)
+  })
+
+  const pause = () => {
+    const isPlay = !audio.paused && audio.currentTime > 0 && !audio.ended && audio.readyState > 2
+    if(!isPlay) return
+    audio.pause()
+  }
+
   app.ports.play.subscribe((data) => {
     const src = data[0]
     const time = data[1]
     if(src === "") return
     if(time <= 0) {
-      audio.pause()
+      pause()
       audio.src = src
       audio.play()
-      audio.addEventListener("timeupdate", () => {
-        app.ports.audioUpdate.send(audio.currentTime)
-      })
-      audio.addEventListener("ended", () => {
-        app.ports.audioEnded.send(null)
-      })
     } else {
       audio.play()
     }
   })
 
-  app.ports.pause.subscribe(() => {
-    const isPlay = !audio.paused && audio.currentTime > 0 && !audio.ended && audio.readyState > 2
-    if(!isPlay) return
-    audio.pause()
-  })
+  app.ports.pause.subscribe(pause)
 
   app.ports.setVolume.subscribe((volume) => {
     audio.volume = volume

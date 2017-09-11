@@ -13338,6 +13338,9 @@ var _user$project$Model$Model = F6(
 		return {audios: a, selectAudioId: b, playAudioId: c, volume: d, isPlay: e, isMute: f};
 	});
 
+var _user$project$Msg$AudioEnded = function (a) {
+	return {ctor: 'AudioEnded', _0: a};
+};
 var _user$project$Msg$Seek = function (a) {
 	return {ctor: 'Seek', _0: a};
 };
@@ -13440,9 +13443,7 @@ var _user$project$Update$pauseAudio = function (model) {
 			{isPlay: false}));
 };
 var _user$project$Update$playAudio = function (model) {
-	var newModel = function (m) {
-		return (!_elm_lang$core$Native_Utils.eq(model.playAudioId, model.selectAudioId)) ? _user$project$Update$stopAudio(m) : m;
-	}(
+	var newModel = ((!_elm_lang$core$Native_Utils.eq(model.playAudioId, model.selectAudioId)) ? _user$project$Update$stopAudio : _elm_lang$core$Basics$identity)(
 		_elm_lang$core$Native_Utils.update(
 			model,
 			{playAudioId: model.selectAudioId}));
@@ -13468,116 +13469,133 @@ var _user$project$Update$playPause = function (model) {
 };
 var _user$project$Update$update = F2(
 	function (msg, model) {
-		var _p0 = msg;
-		switch (_p0.ctor) {
-			case 'Minimize':
-				return A2(
-					_etaque$elm_response$Response$withCmd,
-					_user$project$Ports$minimize(
-						{ctor: '_Tuple0'}),
-					model);
-			case 'DropAudios':
-				var audios = A2(
-					_elm_lang$core$List$map,
-					_user$project$Audio$fromMusicMetadata,
-					A2(_elm_lang$core$List$map, _user$project$MusicMetadata$getMetadata, _p0._0));
-				return _etaque$elm_response$Response$withNone(
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							audios: A2(_elm_lang$core$List$append, model.audios, audios)
-						}));
-			case 'ClickAudio':
-				return _etaque$elm_response$Response$withNone(
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{selectAudioId: _p0._0}));
-			case 'DoubleClickAudio':
-				return A2(
-					_user$project$Mnlib_Update$andThen,
-					_user$project$Update$update(_user$project$Msg$PlayPause),
-					A2(
+		update:
+		while (true) {
+			var _p0 = msg;
+			switch (_p0.ctor) {
+				case 'Minimize':
+					return A2(
+						_etaque$elm_response$Response$withCmd,
+						_user$project$Ports$minimize(
+							{ctor: '_Tuple0'}),
+						model);
+				case 'DropAudios':
+					var audios = A2(
+						_elm_lang$core$List$map,
+						_user$project$Audio$fromMusicMetadata,
+						A2(_elm_lang$core$List$map, _user$project$MusicMetadata$getMetadata, _p0._0));
+					return _etaque$elm_response$Response$withNone(
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								audios: A2(_elm_lang$core$List$append, model.audios, audios)
+							}));
+				case 'ClickAudio':
+					return _etaque$elm_response$Response$withNone(
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{selectAudioId: _p0._0}));
+				case 'DoubleClickAudio':
+					return A2(
 						_user$project$Mnlib_Update$andThen,
-						_user$project$Update$update(
-							_user$project$Msg$ClickAudio(_p0._0)),
-						_etaque$elm_response$Response$withNone(
-							_user$project$Update$stopAudio(model))));
-			case 'PlayPause':
-				return _user$project$Update$playPause(model);
-			case 'UpdateTime':
-				var audio = A2(
-					_elm_lang$core$Maybe$withDefault,
-					_user$project$Audio$init,
-					A2(
-						_elm_lang$core$Maybe$map,
-						function (a) {
-							return _elm_lang$core$Native_Utils.update(
-								a,
-								{nowTime: _p0._0});
-						},
-						_user$project$Model$getPlayingAudio(model)));
-				return _etaque$elm_response$Response$withNone(
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							audios: A3(
-								_elm_community$list_extra$List_Extra$updateIfIndex,
-								function (id) {
-									return _elm_lang$core$Native_Utils.eq(id, model.playAudioId);
-								},
-								_elm_lang$core$Basics$always(audio),
-								model.audios)
-						}));
-			case 'ClickMute':
-				var isMute = !model.isMute;
-				var cmd = isMute ? _user$project$Ports$setVolume(0) : _user$project$Ports$setVolume(model.volume);
-				return A2(
-					_etaque$elm_response$Response$withCmd,
-					cmd,
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{isMute: isMute}));
-			case 'ChangeVolume':
-				var volume = A2(
-					_elm_lang$core$Result$withDefault,
-					1,
-					_elm_lang$core$String$toFloat(_p0._0));
-				return A2(
-					_etaque$elm_response$Response$withCmd,
-					_user$project$Ports$setVolume(volume),
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{volume: volume, isMute: false}));
-			default:
-				var time = A2(
-					_elm_lang$core$Result$withDefault,
-					0,
-					_elm_lang$core$String$toFloat(_p0._0));
-				var audio = A2(
-					_elm_lang$core$Maybe$withDefault,
-					_user$project$Audio$init,
-					A2(
-						_elm_lang$core$Maybe$map,
-						function (a) {
-							return _elm_lang$core$Native_Utils.update(
-								a,
-								{nowTime: time});
-						},
-						_user$project$Model$getPlayingAudio(model)));
-				return A2(
-					_etaque$elm_response$Response$withCmd,
-					_user$project$Ports$seek(time),
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							audios: A3(
-								_elm_community$list_extra$List_Extra$updateIfIndex,
-								function (id) {
-									return _elm_lang$core$Native_Utils.eq(id, model.playAudioId);
-								},
-								_elm_lang$core$Basics$always(audio),
-								model.audios)
-						}));
+						_user$project$Update$update(_user$project$Msg$PlayPause),
+						A2(
+							_user$project$Mnlib_Update$andThen,
+							_user$project$Update$update(
+								_user$project$Msg$ClickAudio(_p0._0)),
+							_etaque$elm_response$Response$withNone(
+								_user$project$Update$stopAudio(model))));
+				case 'PlayPause':
+					return _user$project$Update$playPause(model);
+				case 'UpdateTime':
+					var audio = A2(
+						_elm_lang$core$Maybe$withDefault,
+						_user$project$Audio$init,
+						A2(
+							_elm_lang$core$Maybe$map,
+							function (a) {
+								return _elm_lang$core$Native_Utils.update(
+									a,
+									{nowTime: _p0._0});
+							},
+							_user$project$Model$getPlayingAudio(model)));
+					return _etaque$elm_response$Response$withNone(
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								audios: A3(
+									_elm_community$list_extra$List_Extra$updateIfIndex,
+									function (id) {
+										return _elm_lang$core$Native_Utils.eq(id, model.playAudioId);
+									},
+									_elm_lang$core$Basics$always(audio),
+									model.audios)
+							}));
+				case 'ClickMute':
+					var isMute = !model.isMute;
+					return A2(
+						_etaque$elm_response$Response$withCmd,
+						_user$project$Ports$setVolume(
+							isMute ? 0 : model.volume),
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{isMute: isMute}));
+				case 'ChangeVolume':
+					var volume = A2(
+						_elm_lang$core$Result$withDefault,
+						1,
+						_elm_lang$core$String$toFloat(_p0._0));
+					return A2(
+						_etaque$elm_response$Response$withCmd,
+						_user$project$Ports$setVolume(volume),
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{volume: volume, isMute: false}));
+				case 'Seek':
+					var time = A2(
+						_elm_lang$core$Result$withDefault,
+						0,
+						_elm_lang$core$String$toFloat(_p0._0));
+					var audio = A2(
+						_elm_lang$core$Maybe$withDefault,
+						_user$project$Audio$init,
+						A2(
+							_elm_lang$core$Maybe$map,
+							function (a) {
+								return _elm_lang$core$Native_Utils.update(
+									a,
+									{nowTime: time});
+							},
+							_user$project$Model$getPlayingAudio(model)));
+					return A2(
+						_etaque$elm_response$Response$withCmd,
+						_user$project$Ports$seek(time),
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								audios: A3(
+									_elm_community$list_extra$List_Extra$updateIfIndex,
+									function (id) {
+										return _elm_lang$core$Native_Utils.eq(id, model.playAudioId);
+									},
+									_elm_lang$core$Basics$always(audio),
+									model.audios)
+							}));
+				default:
+					var newSelectAudioId = model.playAudioId + 1;
+					if (_elm_lang$core$Native_Utils.cmp(
+						newSelectAudioId,
+						_elm_lang$core$List$length(model.audios)) > -1) {
+						return _etaque$elm_response$Response$withNone(
+							_user$project$Update$stopAudio(model));
+					} else {
+						var _v1 = _user$project$Msg$DoubleClickAudio(newSelectAudioId),
+							_v2 = model;
+						msg = _v1;
+						model = _v2;
+						continue update;
+					}
+			}
 		}
 	});
 
@@ -14025,7 +14043,11 @@ var _user$project$Main$subscriptions = function (model) {
 			_1: {
 				ctor: '::',
 				_0: _user$project$Ports$audioUpdate(_user$project$Msg$UpdateTime),
-				_1: {ctor: '[]'}
+				_1: {
+					ctor: '::',
+					_0: _user$project$Ports$audioEnded(_user$project$Msg$AudioEnded),
+					_1: {ctor: '[]'}
+				}
 			}
 		});
 };

@@ -19,6 +19,7 @@ subscriptions model =
   Sub.batch
     [ Ports.dropAudios DropAudios
     , Ports.audioUpdate UpdateTime
+    , Ports.audioEnded AudioEnded
     ]
 
 

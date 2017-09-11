@@ -42,8 +42,7 @@ update msg model =
         |> Update.andThen (update PlayPause)
 
     PlayPause ->
-      model
-        |> playPause
+      playPause model
 
     UpdateTime time ->
       let
@@ -61,19 +60,11 @@ update msg model =
       let
         isMute =
           not model.isMute
-
-        cmd =
-          if isMute then
-            Ports.setVolume 0
-
-          else
-            Ports.setVolume model.volume
-
       in
         { model
           | isMute = isMute
         }
-          |> withCmd cmd
+          |> withCmd (Ports.setVolume <| if isMute then 0 else model.volume)
 
     ChangeVolume vol ->
       let
@@ -104,12 +95,27 @@ update msg model =
           |> withCmd (Ports.seek time)
 
 
+    AudioEnded () ->
+      let
+        newSelectAudioId =
+          model.playAudioId + 1
+      in
+        if newSelectAudioId >= List.length model.audios then
+          stopAudio model
+            |> withNone
+
+        else
+          update (DoubleClickAudio newSelectAudioId) model
+
+
 playPause : Model -> Response Model Msg
 playPause model =
   if model.isPlay then
     pauseAudio model
+
   else
     playAudio model
+
 
 playAudio : Model -> Response Model Msg
 playAudio model =
@@ -117,12 +123,11 @@ playAudio model =
     newModel =
       { model | playAudioId = model.selectAudioId }
         |>
-          (\m ->
-            if model.playAudioId /= model.selectAudioId then
-              stopAudio m
-            else
-              m
-          )
+          if model.playAudioId /= model.selectAudioId then
+            stopAudio
+
+          else
+            identity
 
     audio =
       Model.getPlayingAudio newModel
