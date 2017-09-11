@@ -13077,6 +13077,11 @@ var _user$project$Ports$minimize = _elm_lang$core$Native_Platform.outgoingPort(
 	function (v) {
 		return null;
 	});
+var _user$project$Ports$close = _elm_lang$core$Native_Platform.outgoingPort(
+	'close',
+	function (v) {
+		return null;
+	});
 var _user$project$Ports$dropAudios = _elm_lang$core$Native_Platform.incomingPort(
 	'dropAudios',
 	_elm_lang$core$Json_Decode$list(
@@ -13361,6 +13366,7 @@ var _user$project$Msg$ClickAudio = function (a) {
 var _user$project$Msg$DropAudios = function (a) {
 	return {ctor: 'DropAudios', _0: a};
 };
+var _user$project$Msg$CloseWindow = {ctor: 'CloseWindow'};
 var _user$project$Msg$Minimize = {ctor: 'Minimize'};
 
 var _user$project$Mnlib_Update$updateModel = F2(
@@ -13477,6 +13483,12 @@ var _user$project$Update$update = F2(
 					return A2(
 						_etaque$elm_response$Response$withCmd,
 						_user$project$Ports$minimize(
+							{ctor: '_Tuple0'}),
+						model);
+				case 'CloseWindow':
+					return A2(
+						_etaque$elm_response$Response$withCmd,
+						_user$project$Ports$close(
 							{ctor: '_Tuple0'}),
 						model);
 				case 'DropAudios':
@@ -14003,7 +14015,11 @@ var _user$project$View$viewTitleBar = function (model) {
 							_1: {
 								ctor: '::',
 								_0: _elm_lang$html$Html_Attributes$class('close'),
-								_1: {ctor: '[]'}
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Events$onClick(_user$project$Msg$CloseWindow),
+									_1: {ctor: '[]'}
+								}
 							}
 						},
 						{

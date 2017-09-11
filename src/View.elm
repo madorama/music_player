@@ -51,6 +51,7 @@ viewTitleBar model =
     , row
         [ class "button"
         , class "close"
+        , onClick CloseWindow
         ]
         [ Icon.close Color.white 16 ]
     ]

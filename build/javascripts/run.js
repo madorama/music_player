@@ -46,6 +46,8 @@
 
   app.ports.minimize.subscribe(remote.BrowserWindow.getFocusedWindow().minimize)
 
+  app.ports.close.subscribe(remote.BrowserWindow.getFocusedWindow().close)
+
   // 音楽データがD&Dされた時、ElmにMetadataを渡す
   document.ondrop = document.ondragover = (e) => {
     e.preventDefault()

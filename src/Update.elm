@@ -17,6 +17,10 @@ update msg model =
       model
         |> withCmd (Ports.minimize ())
 
+    CloseWindow ->
+      model
+        |> withCmd (Ports.close ())
+
     DropAudios metas ->
       let
         audios =

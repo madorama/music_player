@@ -6,6 +6,7 @@ import MusicMetadata exposing (RawMetadata)
 
 type Msg
   = Minimize
+  | CloseWindow
   | DropAudios (List RawMetadata)
   | ClickAudio Int
   | DoubleClickAudio Int

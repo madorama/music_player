@@ -7,6 +7,9 @@ import MusicMetadata exposing (MusicMetadata, RawMetadata)
 port minimize : () -> Cmd msg
 
 
+port close : () -> Cmd msg
+
+
 port dropAudios : (List RawMetadata -> msg) -> Sub msg
 
 
